@@ -183,3 +183,17 @@ class TestAccountService(TestCase):
         """It should not Delete an Account with invalid ID"""
         resp = self.client.delete(f"{BASE_URL}/0")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_list_accounts(self):
+        """It should List all Accounts"""
+        # Create some accounts for testing
+        num_accounts = 5
+        self._create_accounts(num_accounts)
+        
+        # Retrieve the accounts
+        resp = self.client.get(BASE_URL)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        
+        # Check the number of accounts returned
+        data = resp.get_json()
+        self.assertEqual(len(data), num_accounts)
